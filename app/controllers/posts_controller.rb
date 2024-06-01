@@ -1,14 +1,18 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[ show edit update destroy ]
+  # this means that no authentication is required to view the list of posts and to view an individual post
   before_action :authenticate_user!, except: %i[show index]
   # GET /posts or /posts.json
   def index
+    #  get all records from the posts table and sort them by the created_at field in descending order
     @posts = Post.all.order(created_at: :desc)
   end
 
   # GET /posts/1 or /posts/1.json
   def show
+    # increase the number of post views by 1 and update the corresponding field in the database
     @post.update(views: @post.views + 1 )
+    # receive all comments on this post and sort them
     @comments = @post.comments.order(created_at: :desc)
   end
 
@@ -23,7 +27,9 @@ class PostsController < ApplicationController
 
   # POST /posts or /posts.json
   def create
+    # creating a new object
     @post = Post.new(post_params)
+    # establishes a relationship between the post and the user, indicating that the current user is the author of this post
     @post.user = current_user
 
     respond_to do |format|

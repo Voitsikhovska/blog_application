@@ -19,6 +19,7 @@ class CommentsController < ApplicationController
     def destroy
         @comment = @post.comments.find(params[:id])
         @comment.destroy
+        # redirecting the user to the page with the details of the newly created post
         redirect_to post_path(@post)
     end 
 
